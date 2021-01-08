@@ -6,9 +6,12 @@ public class MainVerticle extends AbstractVerticle {
 
   @Override
   public void start() {
-    vertx.createHttpServer()
+    int port = 8080;
+	if(System.getenv("PORT") != null) 
+		port=Integer.parseInt(System.getenv("PORT"));  
+	vertx.createHttpServer()
         .requestHandler(req -> req.response().end("Hello Vert.x!"))
-        .listen(8080);
+        .listen(port);
   }
 
 }
