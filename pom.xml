@@ -12,6 +12,9 @@
   <properties>
     <vertx.version>4.0.0</vertx.version>
     <main.verticle>io.vertx.starter.MainVerticle</main.verticle>
+    <sonar.projectKey>himanshumps</sonar.projectKey>
+    <sonar.organization>learning-axis-hackathon</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
 
   <dependencyManagement>
