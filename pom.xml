@@ -12,6 +12,8 @@
   <properties>
     <vertx.version>4.0.0</vertx.version>
     <main.verticle>io.vertx.starter.MainVerticle</main.verticle>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <sonar.projectKey>himanshumps</sonar.projectKey>
     <sonar.organization>learning-axis-hackathon</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
