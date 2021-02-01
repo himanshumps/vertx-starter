@@ -73,7 +73,7 @@
               </transformers>
               <artifactSet>
               </artifactSet>
-              <outputFile>${project.build.directory}/app.jar</outputFile>
+              <!--<outputFile>${project.build.directory}/app.jar</outputFile>-->
             </configuration>
           </execution>
         </executions>
@@ -81,5 +81,21 @@
 
     </plugins>
   </build>
-
+  <profiles>
+    <profile>
+        <id>mainprofile</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <build>
+            <finalName>app.jar</finalName>
+        </build>
+    </profile>
+    <profile>
+        <id>openshift</id>
+        <activation>
+            <activeByDefault>false</activeByDefault>
+        </activation>
+    </profile>
+  </profiles>
 </project>
