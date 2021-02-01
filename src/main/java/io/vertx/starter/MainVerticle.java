@@ -10,7 +10,7 @@ public class MainVerticle extends AbstractVerticle {
 	if(System.getenv("PORT") != null) 
 		port=Integer.parseInt(System.getenv("PORT"));  
 	vertx.createHttpServer()
-        .requestHandler(req -> req.response().end("Hello Vert.x - github actions test - final !"))
+        .requestHandler(req -> req.response().end("Hello Vert.x - github actions - final -  !"))
         .listen(port);
   }
 
