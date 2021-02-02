@@ -10,7 +10,7 @@ public class MainVerticle extends AbstractVerticle {
 	if(System.getenv("PORT") != null) 
 		port=Integer.parseInt(System.getenv("PORT"));  
 	vertx.createHttpServer()
-        .requestHandler(req -> req.response().end("Welcome to Learning Axis Hackathon - Team AiKiDo !!"))
+        .requestHandler(req -> req.response().end("Welcome to Learning Axis Hackathon - Team AiKiDo - Demo !!"))
         .listen(port);
   }
 
