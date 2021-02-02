@@ -6,36 +6,13 @@ on:
   push:
     branches:
       - main
-	  - master
-    inputs:
-      quay_image_name:
-       # Friendly description to be shown in the UI instead of 'name'
-        description: 'The quay.io image name'
-        # Default value if no value is explicitly provided
-        default: 'quay.io/himanshumps/vertx_demo'
-        # Input has to be provided for the workflow to run
-        required: true
-      openshift_namespace:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'The openshift project name'
-        # Default value if no value is explicitly provided
-        default: 'hackathon'
-        # Input has to be provided for the workflow to run
-        required: true
-      openshift_deployment_name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'The openshift deployment name'
-        # Default value if no value is explicitly provided
-        default: 'vertx-demo1'
-        # Input has to be provided for the workflow to run
-        required: true
-      okteto_deployment_name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'The okteto deployment name'
-        # Default value if no value is explicitly provided
-        default: 'deployment/vertx-demo'
-        # Input has to be provided for the workflow to run
-        required: true
+      - master
+        
+env:
+  quay_image_name: quay.io/himanshumps/vertx_demo
+  openshift_namespace: hackathon
+  openshift_deployment_name: vertx-demo1
+  okteto_deployment_name: deployment/vertx-demo
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "greet"
@@ -76,11 +53,11 @@ jobs:
     - name: Create the Dockerfile
       run: printf "FROM adoptopenjdk/openjdk8:alpine-jre\nARG JAR_FILE=target/*.jar\nRUN apk --no-cache add curl && mkdir -p /deployments && curl https://repo1.maven.org/maven2/io/fabric8/run-java-sh/1.3.8/run-java-sh-1.3.8-sh.sh -o /deployments/run-java.sh\nCOPY \${JAR_FILE} /deployments/app.jar\nRUN chown -R 1001:0 /deployments && chmod -R 0755 /deployments\nEXPOSE 8080 8443\n USER 1001\nCMD [ \"/deployments/run-java.sh\" ]" > Dockerfile && cat Dockerfile
     - name: Create image using buildah
-      run: buildah bud --layers --build-arg JAR_FILE="vertx-starter/target/app.jar" -t ${{ github.event.inputs.quay_image_name }} .
+      run: buildah bud --layers --build-arg JAR_FILE="vertx-starter/target/app.jar" -t ${{ env.quay_image_name }} .
     - name: Pushing the image to quay registry
-      run: buildah push ${{ github.event.inputs.quay_image_name }}:latest
+      run: buildah push ${{ env.quay_image_name }}:latest
     - name: Deploy to openshift
-      run: oc login --insecure-skip-tls-verify --token=${{ secrets.OC_TOKEN }} --server=https://api.shared-na4.na4.openshift.opentlc.com:6443 && oc import-image ${{ github.event.inputs.openshift_deployment_name }} -n ${{ github.event.inputs.openshift_namespace }}
+      run: oc login --insecure-skip-tls-verify --token=${{ secrets.OC_TOKEN }} --server=https://api.shared-na4.na4.openshift.opentlc.com:6443 && oc import-image ${{ env.openshift_deployment_name }} -n ${{ env.openshift_namespace }}
     - name: Login to okteto and change namespace
       run: okteto login --token ${{ secrets.OKTETO_TOKEN }} && okteto namespace 
     - name: K8S deploy to okteto
@@ -88,4 +65,4 @@ jobs:
       env:
         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
-        args: rollout restart ${{ github.event.inputs.okteto_deployment_name }}
+        args: rollout restart ${{ env.okteto_deployment_name }}
