@@ -4,6 +4,8 @@ name: DevOps Pipeline Using Buildah
 # or API.
 on:
   push:
+    paths-ignore: 
+      - '.github/workflows/**'
     branches:
       - main
       - master
